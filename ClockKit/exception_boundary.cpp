@@ -9,7 +9,7 @@
 namespace boundary {
 extern "C" {
 
-    boundary::Result PhaseLockedClockFromConfig(dex::PhaseLockedClock* res, const char* filename) {
+inline boundary::Result phaseLockedClockFromConfig(dex::PhaseLockedClock* res, const char* filename) {
 
     try {
         res = dex::PhaseLockedClockFromConfigFile(std::string(filename));
@@ -22,9 +22,9 @@ extern "C" {
 }
 
 
-boundary::Result PhaseLockedClock_GetValue(dex::PhaseLockedClock* clock, dex::timestamp_t& ts) {
+inline boundary::Result phaseLockedClockGetValue(const dex::PhaseLockedClock* clock, dex::timestamp_t& ts) {
     try {
-        ts = clock->getValue();
+        ts = const_cast<dex::PhaseLockedClock*>(clock)->getValue();
     } catch (dex::ClockException) {
         return boundary::Result::ClockOutOfSync;
     }
@@ -33,9 +33,9 @@ boundary::Result PhaseLockedClock_GetValue(dex::PhaseLockedClock* clock, dex::ti
 }
 
 
-boundary::Result PhaseLockedClock_GetOffset(dex::PhaseLockedClock* clock, int& offset) {
+inline boundary::Result phaseLockedClockGetOffset(const dex::PhaseLockedClock* clock, int& offset) {
     try {
-        offset = clock->getOffset();
+        offset = const_cast<dex::PhaseLockedClock*>(clock)->getOffset();
     } catch (dex::ClockException) {
         return boundary::Result::ClockOutOfSync;
     }
@@ -44,9 +44,9 @@ boundary::Result PhaseLockedClock_GetOffset(dex::PhaseLockedClock* clock, int& o
 }
 
 
-bool PhaseLockedClock_isSynchronized(dex::PhaseLockedClock* clock) {
+inline bool phaseLockedClockIsSynchronized(const dex::PhaseLockedClock* clock) {
     try {
-        return clock->isSynchronized();
+        return const_cast<dex::PhaseLockedClock*>(clock)->isSynchronized();
     } catch (dex::ClockException) {
         return false;
     }
